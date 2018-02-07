@@ -1,0 +1,11 @@
+B ../_build/default/src
+FLG -open Ppx_deriving_json_lib -w -40
+PKG compiler-libs
+PKG compiler-libs.common
+PKG dynlink
+PKG ocaml-migrate-parsetree
+PKG ppx_derivers
+PKG ppx_deriving.api
+PKG ppx_tools
+PKG result
+S .

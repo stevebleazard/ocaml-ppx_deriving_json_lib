@@ -1,0 +1,17 @@
+(jbuild_version 1)
+
+(rule
+ ((targets (ppx_deriving_json.ml))
+  (deps (ppx_deriving_json.cppo.ml))
+  (action  (run ${bin:cppo} -V OCAML:${ocaml_version} ${<} -o ${@}))
+  ))
+
+(library
+ ((name ppx_deriving_json_lib)
+  (public_name ppx_deriving_json_lib)
+  (libraries (result ppx_deriving.api))
+  (preprocess (action (run ppxfind -legacy ppx_tools.metaquot --as-pp ${<})))
+  (ppx_runtime_libraries (ppx_deriving_json_lib.runtime))
+  (modules (ppx_deriving_json))
+  (kind ppx_deriver)))
+

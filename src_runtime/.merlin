@@ -1,0 +1,5 @@
+B ../_build/default/src_runtime
+FLG -open Ppx_deriving_json_lib_runtime -w -40
+PKG ppx_deriving.runtime
+PKG result
+S .
