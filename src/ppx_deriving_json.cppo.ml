@@ -295,7 +295,7 @@ let ser_str_of_type ~options ~path ({ ptype_loc = loc } as type_decl) =
       let polymorphize_ser  = Ppx_deriving.poly_arrow_of_type_decl
         (fun var -> [%type: [%t var] -> [%t Deriver.value_type]]) type_decl
       in
-      let ty = Typ.poly (List.map Location.mknoloc poly_vars) (polymorphize_ser [%type: [%t typ] -> [%t Deriver.value_type]]) in
+      let ty = Typ.poly poly_vars (polymorphize_ser [%type: [%t typ] -> [%t Deriver.value_type]]) in
       let default_fun =
         let type_path = String.concat "." (path @ [type_decl.ptype_name.txt]) in
         let message =
@@ -310,7 +310,7 @@ let ser_str_of_type ~options ~path ({ ptype_loc = loc } as type_decl) =
       in
       let poly_fun = polymorphize default_fun in
       let poly_fun =
-        (Ppx_deriving.fold_left_type_decl (fun exp name -> Exp.newtype (Location.mknoloc name) exp) poly_fun type_decl)
+        (Ppx_deriving.fold_left_type_decl (fun exp name -> Exp.newtype name exp) poly_fun type_decl)
       in
       let mod_name = "M_"^to_json_name in
       let typ = Type.mk ~kind:(Ptype_record [Type.field ~mut:Mutable (mknoloc "f") ty])
@@ -367,7 +367,7 @@ let ser_str_of_type ~options ~path ({ ptype_loc = loc } as type_decl) =
     in
     let ty = ser_type_of_decl ~options ~path type_decl in
     let fv = Ppx_deriving.free_vars_in_core_type ty in
-    let poly_type = Typ.force_poly @@ Typ.poly (List.map Location.mknoloc fv) @@ ty in
+    let poly_type = Typ.force_poly @@ Typ.poly fv @@ ty in
     let var_s = Ppx_deriving.mangle_type_decl (`Suffix Deriver.suffix_to) type_decl in
     let var = pvar var_s in
     (* CR-someday xclerc: once available, it would be better to disable warnings on the
@@ -519,13 +519,13 @@ let desu_str_of_type ~options ~path ({ ptype_loc = loc } as type_decl) =
       in
       let polymorphize_desu = Ppx_deriving.poly_arrow_of_type_decl
         (fun var -> [%type: [%t Deriver.value_type] -> [%t error_or var]]) type_decl in
-      let ty = Typ.poly (List.map Location.mknoloc poly_vars)
+      let ty = Typ.poly poly_vars
         (polymorphize_desu [%type: [%t Deriver.value_type] -> [%t error_or typ]])
       in
       let default_fun = Exp.function_ [Exp.case [%pat? _] top_error] in
       let poly_fun = polymorphize default_fun in
       let poly_fun =
-        (Ppx_deriving.fold_left_type_decl (fun exp name -> Exp.newtype (Location.mknoloc name) exp) poly_fun type_decl)
+        (Ppx_deriving.fold_left_type_decl (fun exp name -> Exp.newtype name exp) poly_fun type_decl)
       in
       let mod_name = "M_"^Deriver.suffix_of in
       let typ = Type.mk ~kind:(Ptype_record [Type.field ~mut:Mutable (mknoloc "f") ty])
@@ -578,7 +578,7 @@ let desu_str_of_type ~options ~path ({ ptype_loc = loc } as type_decl) =
     in
     let ty = desu_type_of_decl ~options ~path type_decl in
     let fv = Ppx_deriving.free_vars_in_core_type ty in
-    let poly_type = Typ.force_poly @@ Typ.poly (List.map Location.mknoloc fv) @@ ty in
+    let poly_type = Typ.force_poly @@ Typ.poly fv @@ ty in
     let var_s = Ppx_deriving.mangle_type_decl (`Suffix Deriver.suffix_of) type_decl in
     let var = pvar var_s in
     let var_s_exn = var_s ^ "_exn" in
@@ -665,7 +665,7 @@ let ser_sig_of_type ~options ~path type_decl =
     let polymorphize_ser  = Ppx_deriving.poly_arrow_of_type_decl
       (fun var -> [%type: [%t var] -> [%t Deriver.value_type]]) type_decl
     in
-    let ty = Typ.poly (List.map Location.mknoloc poly_vars) (polymorphize_ser [%type: [%t typ] -> [%t Deriver.value_type]]) in
+    let ty = Typ.poly poly_vars (polymorphize_ser [%type: [%t typ] -> [%t Deriver.value_type]]) in
     let typ = Type.mk ~kind:(Ptype_record
        [Type.field ~mut:Mutable (mknoloc "f") ty]) (mknoloc ("t" ^ Deriver.suffix_to))
     in
@@ -704,7 +704,7 @@ let desu_sig_of_type ~options ~path type_decl =
     let typ = Ppx_deriving.core_type_of_type_decl type_decl in
     let polymorphize_desu = Ppx_deriving.poly_arrow_of_type_decl
       (fun var -> [%type: [%t Deriver.value_type] -> [%t error_or var]]) type_decl in
-    let ty = Typ.poly (List.map Location.mknoloc poly_vars)
+    let ty = Typ.poly poly_vars
       (polymorphize_desu [%type: [%t Deriver.value_type] -> [%t error_or typ]])
     in
     let typ = Type.mk ~kind:(Ptype_record
