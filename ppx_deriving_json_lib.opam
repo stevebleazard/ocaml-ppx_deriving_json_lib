@@ -2,19 +2,13 @@ opam-version: "1.2"
 maintainer: "Steve Bleazard <stevebleazard@googlemail.com>"
 authors: [ "whitequark <whitequark@whitequark.org>" "Steve Bleazard <stevebleazard@googlemail.com>" ]
 homepage: "https://github.com/stevebleazard/ocaml-ppx_deriving_json_lib"
-license: "MIT"
-doc: "http://stevebleazard.github.io/ocaml-ppx_deriving_json_lib"
 bug-reports: "https://github.com/stevebleazard/ocaml-ppx_deriving_json_lib/issues"
+license: "MIT"
 dev-repo: "git://github.com/stevebleazard/ocaml-ppx_deriving_json_lib.git"
+doc: "http://stevebleazard.github.io/ocaml-ppx_deriving_json_lib"
 tags: [ "syntax" "json" ]
-substs: [ "pkg/META" ]
 build: [
-  "ocaml" "pkg/build.ml" "native=%{ocaml-native}%"
-                         "native-dynlink=%{ocaml-native-dynlink}%"
-]
-build-test: [
-  "ocamlbuild" "-classic-display" "-use-ocamlfind"
-    "src_test/test_ppx_json_lib.byte" "--"
+  ["jbuilder" "build" "-p" name "-j" jobs "@install"]
 ]
 depends: [
   "result"
