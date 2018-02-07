@@ -1,0 +1,4 @@
+JSON codec generator library for OCaml >=4.02
+
+ppx_deriving_json is a ppx_deriving plugin libary providing a
+encoder / decoder independent JSON codec generator.
