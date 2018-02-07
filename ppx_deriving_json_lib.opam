@@ -22,6 +22,7 @@ depends: [
   "ocamlfind" {build}
   "ocamlbuild" {build}
   "cppo" {build}
+  "ppxfind" {build}
   "cppo_ocamlbuild" {build}
   "ounit"        {test}
   "ppx_import"   {test & >= "1.1"}
