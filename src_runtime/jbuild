@@ -4,6 +4,6 @@
  ((name ppx_deriving_json_lib_runtime)
   (public_name ppx_deriving_json_lib.runtime)
   (libraries (result ppx_deriving.runtime))
-  (modules (ppx_deriving_json_runtime))
+  (modules (ppx_deriving_json_lib_runtime))
   (preprocess no_preprocessing)
   ))
